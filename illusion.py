@@ -126,11 +126,11 @@ for i in range(1):
         instruction_IB.draw()
         win.flip()
         keys_G = p.event.waitKeys(keyList = ["return"])
-    if conditionsNum == 2:
+    elif conditionsNum == 2:
         instruction_IF.draw()
         win.flip()
         keys_G = p.event.waitKeys(keyList = ["return"])
-    if conditionsNum == 3:
+    elif conditionsNum == 3:
         instruction_J.draw()
         win.flip()
         keys_G = p.event.waitKeys(keyList = ["return"])
@@ -227,17 +227,36 @@ for i in range(2):
     win.flip()
     #thisresp = None
     while True:
-        instruction_B.draw()
-        instruction_F.draw()
-        win.flip()
-        keys_B = p.event.waitKeys(keyList = ["q", "w", "e"])
-        keys_F = p.event.waitKeys(keyList = ["i", "o", "p"])
-        if keys_B == "q" or keys_B == "w" or keys_B == "e":
+        if conditionsNum == 1:
+            instruction_B.draw()
+            win.flip()
+            keys_B = p.event.waitKeys(keyList = ["q", "w", "e"])
+            if keys_B == "q" or keys_B == "w" or keys_B == "e":
+                break
+            print keys_B
+            win.flip()
             break
-        if keys_F == "i" or keys_F == "o" or keys_F == "p":
+        elif conditionsNum == 2:
+            instruction_F.draw()
+            win.flip()
+            keys_F = p.event.waitKeys(keyList = ["i", "o", "p"])
+            if keys_F == "i" or keys_F == "o" or keys_F == "p":
+                break
+            win.flip()
             break
-        print keys_B
-        print keys_F
-        win.flip()
-        break
+        elif conditionsNum == 3:
+            instruction_B.draw()
+            win.flip()
+            keys_B = p.event.waitKeys(keyList = ["q", "w", "e"])
+            if keys_B == "q" or keys_B == "w" or keys_B == "e":
+                break
+            instruction_F.draw()
+            win.flip()
+            keys_F = p.event.waitKeys(keyList = ["i", "o", "p"])
+            if keys_F == "i" or keys_F == "o" or keys_F == "p":
+                break
+            print keys_B
+            print keys_F
+            win.flip()
+            break
     core.wait(2)
