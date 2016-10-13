@@ -116,13 +116,11 @@ def soa():
 conditions = [1,2,3]
 #randomize block conditions
 random.shuffle(conditions)
-print conditions
-trials = 1
+Trial = 1
 for c in range(3):
     #chooses one condition
     conditionsNum = conditions[0]
-
-    print conditionsNum
+    print "Condition = ", conditionsNum
     if conditionsNum == 1:  #individual beep block
         instruction_IB.draw()
         instruction_E.draw()
@@ -157,8 +155,7 @@ for c in range(3):
     print option
     for t in range(2): #number of trials
         #beep/flash combinations
-        print "Hi"
-        print trials
+        print "Trial number =", Trial
 
 
         for i in range(1):
@@ -172,6 +169,10 @@ for c in range(3):
                 callsound()
                 soa()
                 flash()
+                GivenFlash = 1
+                GivenBeep = 1
+                CorrectFlash = GivenFlash
+                CorrectBeep = GivenBeep
             #1B 2F
             elif optionNum == 2:
                 callsound()
@@ -179,6 +180,10 @@ for c in range(3):
                 flash()
                 soa_0()
                 flash()
+                GivenFlash = 2
+                GivenBeep = 1
+                CorrectFlash = GivenFlash
+                CorrectBeep = GivenBeep
             #1B 3F
             elif optionNum == 3:
                 callsound()
@@ -188,6 +193,10 @@ for c in range(3):
                 flash()
                 soa_0()
                 flash()
+                GivenFlash = 3
+                GivenBeep = 1
+                CorrectFlash = GivenFlash
+                CorrectBeep = GivenBeep
             #2B 1F
             elif optionNum == 4:
                 callsound()
@@ -195,6 +204,10 @@ for c in range(3):
                 flash()
                 soa()
                 callsound()
+                GivenFlash = 1
+                GivenBeep = 2
+                CorrectFlash = GivenFlash
+                CorrectBeep = GivenBeep
             #2B 2F
             elif optionNum == 5:
                 callsound()
@@ -204,6 +217,10 @@ for c in range(3):
                 callsound()
                 soa()
                 flash()
+                GivenFlash = 2
+                GivenBeep = 2
+                CorrectFlash = GivenFlash
+                CorrectBeep = GivenBeep
             #2B 3F
             elif optionNum == 6:
                 callsound()
@@ -215,6 +232,10 @@ for c in range(3):
                 flash()
                 soa_0()
                 flash()
+                GivenFlash = 3
+                GivenBeep = 2
+                CorrectFlash = GivenFlash
+                CorrectBeep = GivenBeep
             #3B 1F
             elif optionNum == 7:
                 callsound()
@@ -224,6 +245,10 @@ for c in range(3):
                 callsound()
                 soa_0()
                 callsound()
+                GivenFlash = 1
+                GivenBeep = 3
+                CorrectFlash = GivenFlash
+                CorrectBeep = GivenBeep
             #3B 2F
             elif optionNum == 8:
                 callsound()
@@ -235,6 +260,10 @@ for c in range(3):
                 flash()
                 soa()
                 callsound()
+                GivenFlash = 2
+                GivenBeep = 3
+                CorrectFlash = GivenFlash
+                CorrectBeep = GivenBeep
             #3B 3F
             elif optionNum == 9:
                 callsound()
@@ -248,32 +277,65 @@ for c in range(3):
                 callsound()
                 soa()
                 flash()
+                GivenFlash = 3
+                GivenBeep = 3
+                CorrectFlash = GivenFlash
+                CorrectBeep = GivenBeep
             win.flip()
+            print "Given Flash = ", GivenFlash
+            print "Given Beep = ", GivenBeep
+            print "CorrectFlash = ", CorrectFlash
+            print "CorrectBeep = ", CorrectBeep
             del option[0]
-            trials = trials + 1
+            Trial = Trial + 1
             #participant input
             while True:
                 if conditionsNum == 1:  #individual beep block
                     instruction_B.draw()
                     win.flip()
                     keys_B = p.event.waitKeys(keyList = ["q", "w", "e", "escape"])
+                    AnswerPB = keys_B
+                    for l in AnswerPB:
+                        if (l == "q"):
+                            ChosenBeep = 1
+                        elif (l == "w"):
+                            ChosenBeep = 2
+                        elif (l == "e"):
+                            ChosenBeep = 3
+                        ChosenFlash = "NA"
                     if keys_B == "q" or keys_B == "w" or keys_B == "e":
                         break
                     elif keys_B[0] == "escape":
                         win.close()
                         core.quit()
                     print keys_B
+                    print "AnswerPB = ", AnswerPB
+                    print "ChosenBeep = ", ChosenBeep
+                    print "ChosenFlash = ", ChosenFlash
                     win.flip()
                     break
                 elif conditionsNum == 2:    #individual flash block
                     instruction_F.draw()
                     win.flip()
                     keys_F = p.event.waitKeys(keyList = ["i", "o", "p", "escape"])
+                    AnswerPF = keys_F
+                    for l in AnswerPF:
+                        if (l == "i"):
+                            ChosenFlash = 1
+                        elif (l == "o"):
+                            ChosenFlash = 2
+                        elif (l == "p"):
+                            ChosenFlash = 3
+                        ChosenBeep = "NA"
                     if keys_F == "i" or keys_F == "o" or keys_F == "p":
                         break
                     elif keys_F[0] == "escape":
                         win.close()
                         core.quit()
+                    print keys_F
+                    print "AnswerPF = ", AnswerPF
+                    print "Chosen Beep = ", ChosenBeep
+                    print "Chosen Flash = ", ChosenFlash
                     win.flip()
                     break
                 elif conditionsNum == 3:    #joint block
@@ -284,6 +346,22 @@ for c in range(3):
                     #order of participant key press does not matter
                     while flashresp == 0 or beepresp == 0:
                         keys_BF = p.event.waitKeys(keyList = ["q", "w", "e","i", "o", "p", "escape"])
+                        AnswerPB = keys_BF
+                        for l in  AnswerPB:
+                            if l == "q":
+                                ChosenBeep = 1
+                            elif l == "w":
+                                ChosenBeep = 2
+                            elif l == "e":
+                                ChosenBeep = 3
+                        AnswerPF = keys_BF
+                        for l in AnswerPF:
+                            if l == "i":
+                                ChosenFlash = 1
+                            elif l == "o":
+                                ChosenFlash = 2
+                            elif l == "p":
+                                ChosenFlash = 3
                         if keys_BF[0] == "q" or keys_BF[0] == "w" or keys_BF[0] == "e":
                             beepresp = 1
                             print beepresp
@@ -293,7 +371,11 @@ for c in range(3):
                         elif keys_BF[0] == "escape":
                             win.close()
                             core.quit()
+
                         print keys_BF
+                        print "AnswerPB = ", AnswerPB
+                        print "Chosen Beep = ", ChosenBeep
+                        print "Chosen Flash = ", ChosenFlash
                     win.flip()
                     print "here"
                     break
