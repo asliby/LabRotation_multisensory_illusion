@@ -27,8 +27,7 @@ csvfile = "Sub%s.csv" % SUB
 path = SUBDIR + csvfile
 
 # create header
-header = ["Subjectnumber","Block", "Trial","
-Flashes",
+header = ["Subjectnumber","Block", "Trial","GivenFlashes",
 "ChosenFlash","CorrectFlash","RTFlash","GivenBeeps",
 "ChosenBeeps","CorrectBeeps","RTBeep"]
 
@@ -38,7 +37,6 @@ if not os.path.exists(SUBDIR):
     with open(path, 'wb') as f:
         wr = csv.writer(f)
         wr.writerow(header)
-
 
 #set window parameters MAKE SURE TO CHANGE SIZE WHEN VIEWING ON OWN MONITOR
 win = p.visual.Window(size=(1440, 900), color=(-1, -1, -1), colorSpace='rgb', fullscr=True,
@@ -98,13 +96,14 @@ def flash():
         win.flip()
         fpsClock.tick(FPS)
 #interval functions
+#beep-beep or flash-flash interval
 def soa_0():
     fpsClock = pygame.time.Clock()
     for frameN in range(48):
         fixation.draw(win)
         win.flip()
         fpsClock.tick(FPS)
-
+#beep-flash interval
 def soa():
     fpsClock = pygame.time.Clock()
     for frameN in range(16):
@@ -112,19 +111,19 @@ def soa():
         win.flip()
         fpsClock.tick(FPS)
 
+clock = core.Clock()
 
 #possible combination of blocks array
 conditions = [1,2,3]
 #randomize block conditions
 random.shuffle(conditions)
-print conditions
-trials = 1
+Trial = 1
 for c in range(3):
     #chooses one condition
-    conditionsNum = conditions[0]
+    Block = conditions[0]
+    print "Block = ", Block
 
-    print conditionsNum
-    if conditionsNum == 1:  #individual beep block
+    if Block == 1:  #individual beep block
         instruction_IB.draw()
         instruction_E.draw()
         win.flip()
@@ -133,7 +132,7 @@ for c in range(3):
         if keys_G[0] == "escape":
             win.close()
             core.quit()
-    elif conditionsNum == 2:    #individual flash block
+    elif Block == 2:    #individual flash block
         instruction_IF.draw()
         instruction_E.draw()
         win.flip()
@@ -143,7 +142,7 @@ for c in range(3):
             win.close()
             core.quit()
 
-    elif conditionsNum == 3:    #joint block
+    elif Block == 3:    #joint block
         instruction_E.draw()
         instruction_J.draw()
         win.flip()
@@ -152,27 +151,32 @@ for c in range(3):
         if keys_G[0] == "escape":
             win.close()
             core.quit()
-
-    option = [1, 2, 3, 4, 5, 6, 7, 8, 9]*2
+    #beep/flash combinations
+    option = [1, 2, 3, 4, 5, 6, 7, 8, 9]*2 #multiply my 1/9 number of trials desired
     random.shuffle(option)
-    print option
-    for t in range(2): #number of trials
-        #beep/flash combinations
-        print "Hi"
-        print trials
+    for t in range(2): #number of trials per condition
+        data = []
+        data.append(SUB)
+        data.append(Block)
+        print "Trial number =", Trial
+        data.append(Trial)
 
 
         for i in range(1):
             #choose random combination
             core.wait(1)
             optionNum = option[0]
-            print optionNum
+            print "optionNum = ", optionNum
 
             #1B 1F
             if optionNum == 1:
                 callsound()
                 soa()
                 flash()
+                GivenFlash = 1
+                GivenBeep = 1
+                CorrectFlash = GivenFlash
+                CorrectBeep = GivenBeep
             #1B 2F
             elif optionNum == 2:
                 callsound()
@@ -180,6 +184,10 @@ for c in range(3):
                 flash()
                 soa_0()
                 flash()
+                GivenFlash = 2
+                GivenBeep = 1
+                CorrectFlash = GivenFlash
+                CorrectBeep = GivenBeep
             #1B 3F
             elif optionNum == 3:
                 callsound()
@@ -189,6 +197,10 @@ for c in range(3):
                 flash()
                 soa_0()
                 flash()
+                GivenFlash = 3
+                GivenBeep = 1
+                CorrectFlash = GivenFlash
+                CorrectBeep = GivenBeep
             #2B 1F
             elif optionNum == 4:
                 callsound()
@@ -196,6 +208,10 @@ for c in range(3):
                 flash()
                 soa()
                 callsound()
+                GivenFlash = 1
+                GivenBeep = 2
+                CorrectFlash = GivenFlash
+                CorrectBeep = GivenBeep
             #2B 2F
             elif optionNum == 5:
                 callsound()
@@ -205,6 +221,10 @@ for c in range(3):
                 callsound()
                 soa()
                 flash()
+                GivenFlash = 2
+                GivenBeep = 2
+                CorrectFlash = GivenFlash
+                CorrectBeep = GivenBeep
             #2B 3F
             elif optionNum == 6:
                 callsound()
@@ -216,6 +236,10 @@ for c in range(3):
                 flash()
                 soa_0()
                 flash()
+                GivenFlash = 3
+                GivenBeep = 2
+                CorrectFlash = GivenFlash
+                CorrectBeep = GivenBeep
             #3B 1F
             elif optionNum == 7:
                 callsound()
@@ -225,6 +249,10 @@ for c in range(3):
                 callsound()
                 soa_0()
                 callsound()
+                GivenFlash = 1
+                GivenBeep = 3
+                CorrectFlash = GivenFlash
+                CorrectBeep = GivenBeep
             #3B 2F
             elif optionNum == 8:
                 callsound()
@@ -236,6 +264,10 @@ for c in range(3):
                 flash()
                 soa()
                 callsound()
+                GivenFlash = 2
+                GivenBeep = 3
+                CorrectFlash = GivenFlash
+                CorrectBeep = GivenBeep
             #3B 3F
             elif optionNum == 9:
                 callsound()
@@ -249,16 +281,41 @@ for c in range(3):
                 callsound()
                 soa()
                 flash()
+                GivenFlash = 3
+                GivenBeep = 3
+                CorrectFlash = GivenFlash
+                CorrectBeep = GivenBeep
             win.flip()
+
+            #delete flash-beep combination from total possible combo/trial list
             del option[0]
-            trials = trials + 1
+            #records trial numbers
+            Trial = Trial + 1
             #participant input
             while True:
-                if conditionsNum == 1:  #individual beep block
+                if Block == 1:  #individual beep block
                     instruction_B.draw()
                     win.flip()
-                    keys_B = p.event.waitKeys(keyList = ["q", "w", "e", "escape"], timeStamped = False)
-                    AnswerPB = keys_B
+                    beepresp = 0
+                    RTB = []
+                    frame_counter = sys._getframe()
+                    print "frame_counter", frame_counter
+                    while beepresp == 0:
+                        frame_counter = frame_counter + 1
+                        keys_B = p.event.waitKeys(keyList = ["q", "w", "e", "escape"])
+                        if keys_B == "q" or keys_B == "w" or keys_B == "e":
+                            beepresp = 1
+                            RTB.append(frame_counter)
+                        elif keys_B[0] == "escape":
+                            win.close()
+                            core.quit()
+                            break
+
+
+                    print "keys_B = ", keys_B
+                    print "RTB"
+                    AnswerPB = keys_B[0]
+                    #defines letter keys as numerical value to save in correct Beep or Flash column of data
                     for l in AnswerPB:
                         if (l == "q"):
                             ChosenBeep = 1
@@ -267,24 +324,50 @@ for c in range(3):
                         elif (l == "e"):
                             ChosenBeep = 3
                         ChosenFlash = "NA"
-                    if keys_B == "q" or keys_B == "w" or keys_B == "e":
-                        break
-                    elif keys_B[0] == "escape":
-                        win.close()
-                        core.quit()
-                    print keys_B
-                    print "AnswerPB = ", AnswerPB
-                    print "ChosenBeep = ", ChosenBeep
-                    print "ChosenFlash = ", ChosenFlash
 
+
+                    print "AnswerPB = ", AnswerPB
+                    print "Given Flash = ", GivenFlash
+                    data.append(GivenFlash)
+                    print "ChosenFlash = ", ChosenFlash
+                    data.append(ChosenFlash)
+                    print "CorrectFlash = ", CorrectFlash
+                    data.append(CorrectFlash)
+                    RTFlash = "NA"
+                    data.append(RTFlash)
+                    print "Given Beep = ", GivenBeep
+                    data.append(GivenBeep)
+                    print "ChosenBeep = ", ChosenBeep
+                    data.append(ChosenBeep)
+                    print "CorrectBeep = ", CorrectBeep
+                    data.append(CorrectBeep)
+                    RTBeep = RTB
+                    data.append(RTBeep)
                     win.flip()
                     break
-
-                elif conditionsNum == 2:    #individual flash block
+                elif Block == 2:    #individual flash block
                     instruction_F.draw()
                     win.flip()
-                    keys_F = p.event.waitKeys(keyList = ["i", "o", "p", "escape"], timeStamped = False)
-                    AnswerPF = keys_F
+                    clock.reset()
+                    flashresp = 0
+                    RTF = []
+                    frame_counter = sys._getframe()
+                    print "frame_counter", frame_counter
+                    keys_F = p.event.waitKeys(keyList = ["i", "o", "p", "escape"], timeStamped = clock)
+                    while flashresp == 0:
+                        frame_counter = frame_counter + 1
+                        if keys_F == "i" or keys_F == "o" or keys_F == "p":
+                            flashresp = 1
+                            RTF.append(frame_counter)
+                        elif keys_F[0] == "escape":
+                            win.close()
+                            core.quit()
+                            break
+
+                    print "keys_F = ", keys_F
+                    print RTF
+                    AnswerTF = keys_F[0]
+                    AnswerPF = AnswerTF[0]
                     for l in AnswerPF:
                         if (l == "i"):
                             ChosenFlash = 1
@@ -293,28 +376,51 @@ for c in range(3):
                         elif (l == "p"):
                             ChosenFlash = 3
                         ChosenBeep = "NA"
-                    if keys_F == "i" or keys_F == "o" or keys_F == "p":
-                        break
 
-                    elif keys_F[0] == "escape":
-                        win.close()
-                        core.quit()
-                    print keys_F
+
                     print "AnswerPF = ", AnswerPF
-                    print "Chosen Beep = ", ChosenBeep
-                    print "Chosen Flash = ", ChosenFlash
+                    print "Given Flash = ", GivenFlash
+                    data.append(GivenFlash)
+                    print "ChosenFlash = ", ChosenFlash
+                    data.append(ChosenFlash)
+                    print "CorrectFlash = ", CorrectFlash
+                    data.append(CorrectFlash)
+                    RTFlash = AnswerTF[1]
+                    data.append(RTFlash)
+                    print "Given Beep = ", GivenBeep
+                    data.append(GivenBeep)
+                    print "ChosenBeep = ", ChosenBeep
+                    data.append(ChosenBeep)
+                    print "CorrectBeep = ", CorrectBeep
+                    data.append(CorrectBeep)
+                    RTBeep = "NA"
+                    data.append(RTBeep)
+
                     win.flip()
                     break
-
-                elif conditionsNum == 3:    #joint block
+                elif Block == 3:    #joint block
                     instruction_BF.draw()
                     win.flip()
+                    clock.reset()
                     flashresp = 0
                     beepresp = 0
                     #order of participant key press does not matter
                     while flashresp == 0 or beepresp == 0:
-                        keys_BF = p.event.waitKeys(keyList = ["q", "w", "e","i", "o", "p", "escape"], timeStamped = False)
-                        AnswerPB = keys_BF
+                        keys_BF = p.event.waitKeys(keyList = ["q", "w", "e","i", "o", "p", "escape"], timeStamped = clock)
+                        if keys_BF[0] == "q" or keys_BF[0] == "w" or keys_BF[0] == "e":
+                            beepresp = 1
+                            print beepresp
+
+                        if keys_BF[0] == "i" or keys_BF[0] == "o" or keys_BF[0] == "p":
+                            flashresp = 1
+                            print flashresp
+
+                        elif keys_BF[0] == "escape":
+                            win.close()
+                            core.quit()
+
+                        AnswerTB = keys_BF[0]
+                        AnswerPB = AnswerTB[0]
                         for l in  AnswerPB:
                             if l == "q":
                                 ChosenBeep = 1
@@ -322,7 +428,9 @@ for c in range(3):
                                 ChosenBeep = 2
                             elif l == "e":
                                 ChosenBeep = 3
-                        AnswerPF = keys_BF
+
+                        AnswerTF = keys_BF[0]
+                        AnswerPF = AnswerTF[0]
                         for l in AnswerPF:
                             if l == "i":
                                 ChosenFlash = 1
@@ -330,29 +438,41 @@ for c in range(3):
                                 ChosenFlash = 2
                             elif l == "p":
                                 ChosenFlash = 3
-                        if keys_BF[0] == "q" or keys_BF[0] == "w" or keys_BF[0] == "e":
-                            beepresp = 1
-                            print beepresp
-                        if keys_BF[0] == "i" or keys_BF[0] == "o" or keys_BF[0] == "p":
-                            flashresp = 1
-                            print flashresp
-                        elif keys_BF[0] == "escape":
-                            win.close()
-                            core.quit()
-                        print keys_BF
 
 
+
+                        print "keys_BF = ", keys_BF
                         print "AnswerPB = ", AnswerPB
-                        print "Chosen Beep = ", ChosenBeep
-                        print "Chosen Flash = ", ChosenFlash
-
+                        print "AnswerPF = ", AnswerPF
+                        print "Given Flash = ", GivenFlash
+                        data.append(GivenFlash)
+                        print "ChosenFlash = ", ChosenFlash
+                        data.append(ChosenFlash)
+                        print "CorrectFlash = ", CorrectFlash
+                        data.append(CorrectFlash)
+                        RTFlash = AnswerTF[1]
+                        data.append(RTFlash)
+                        print "Given Beep = ", GivenBeep
+                        data.append(GivenBeep)
+                        print "ChosenBeep = ", ChosenBeep
+                        data.append(ChosenBeep)
+                        print "CorrectBeep = ", CorrectBeep
+                        data.append(CorrectBeep)
+                        RTBeep = AnswerTB[1]
+                        data.append(RTBeep)
                     win.flip()
+                    print "here"
                     break
-
-
         core.wait(2)
+
+    # write data to file
+        with open(path, 'a') as f:
+            wr = csv.writer(f)
+            wr.writerow(data)
+
     #takes block out of randomization when finished t # of trials
     del conditions[0]
+
 
 win.close()
 core.quit()
