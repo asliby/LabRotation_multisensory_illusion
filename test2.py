@@ -37,9 +37,9 @@ if not os.path.exists(SUBDIR):
         wr.writerow(header)
 
 #set window parameters MAKE SURE TO CHANGE SIZE WHEN VIEWING ON OWN MONITOR
-win = p.visual.Window(size=(1440, 900), color=(-1, -1, -1), colorSpace='rgb', fullscr=True,
+win = p.visual.Window(size=(1680, 1050), color=(-1, -1, -1), colorSpace='rgb', fullscr=True,
 allowGUI=True, monitor='testMonitor', blendMode='avg', pos = (-.5, 0),
-screen=0, allowStencil=False, stereo=False, winType = 'pyglet')
+screen=0, allowStencil=False, stereo=False, winType = 'pygame')
 #parameters for flash
 circle = p.visual.Circle(win, units='deg', radius = 2, pos = (0,-5), fillColor = (1, 1, 1), lineColor = (1, 1, 1))
 #set fixation cross parameters
@@ -79,7 +79,7 @@ FPS = 60
 #function to play sound
 def callsound():
     fpsClock = pygame.time.Clock()
-    for frameN in range(16):
+    for frameN in range(1):
         if frameN == 0:
             beep.play()
         fpsClock.tick(FPS)
@@ -87,7 +87,7 @@ def callsound():
 #function for flash
 def flash():
     fpsClock = pygame.time.Clock()
-    for frameN in range(16):
+    for frameN in range(1):
         fixation.draw(win)
         if frameN % 30  ==  0:
             circle.draw(win)
@@ -97,14 +97,14 @@ def flash():
 #beep-beep or flash-flash interval
 def soa_0():
     fpsClock = pygame.time.Clock()
-    for frameN in range(48):
+    for frameN in range(3):
         fixation.draw(win)
         win.flip()
         fpsClock.tick(FPS)
 #beep-flash interval
 def soa():
     fpsClock = pygame.time.Clock()
-    for frameN in range(16):
+    for frameN in range(1):
         fixation.draw(win)
         win.flip()
         fpsClock.tick(FPS)
@@ -151,9 +151,9 @@ for c in range(3):
             win.close()
             core.quit()
     #beep/flash combinations
-    option = [1, 2, 3, 4, 5, 6, 7, 8, 9]*2 #multiply my 1/9 number of trials desired
+    option = [1, 2, 3, 4, 5, 6, 7, 8, 9]*10 #multiply my 1/9 number of trials desired
     random.shuffle(option)
-    for t in range(2): #number of trials per condition
+    for t in range(30): #number of trials per condition
         data = []
         data.append(SUB)
         data.append(Block)
@@ -386,8 +386,9 @@ for c in range(3):
                 elif Block == 3:    #joint block
                     instruction_B.draw()
                     win.flip()
-                    keys_B = p.event.waitKeys(keyList = ["q", "w", "e", "escape"])
                     clock_B.reset()
+                    keys_B = p.event.waitKeys(keyList = ["q", "w", "e", "escape"])
+                    
                     if keys_B == "q" or keys_B == "w" or keys_B == "e":
                         clock_B.getTime()
                         break
@@ -470,7 +471,7 @@ for c in range(3):
                     win.flip()
                     print "here"
                     break
-        core.wait(2)
+        core.wait(1)
 
     # write data to file
         with open(path, 'a') as f:
