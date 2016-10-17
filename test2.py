@@ -36,16 +36,16 @@ if not os.path.exists(SUBDIR):
         wr = csv.writer(f)
         wr.writerow(header)
 
-#set window parameters MAKE SURE TO CHANGE SIZE WHEN VIEWING ON OWN MONITOR
-win = p.visual.Window(size=(1680, 1050), color=(-1, -1, -1), colorSpace='rgb', fullscr=True,
+#set window parameters MAKE SURE TO CHANGE SIZE WHEN VIEWING ON OWN MONITOR #1680, 1050 pygame pyglet
+win = p.visual.Window(size=(1440, 900), color=(-1, -1, -1), colorSpace='rgb', fullscr=True,
 allowGUI=True, monitor='testMonitor', blendMode='avg', pos = (-.5, 0),
-screen=0, allowStencil=False, stereo=False, winType = 'pygame')
+screen=0, allowStencil=False, stereo=False, winType = 'pyglet')
 #parameters for flash
 circle = p.visual.Circle(win, units='deg', radius = 2, pos = (0,-5), fillColor = (1, 1, 1), lineColor = (1, 1, 1))
 #set fixation cross parameters
 fixation = visual.TextStim(win=win, ori=0, name='fixation',
     text='+',    font='Arial',
-    pos=(0, 0), height=.1, wrapWidth=None,
+    pos=(0, 0), height=.3, wrapWidth=None,
     color='white', colorSpace='rgb', opacity=1,
     depth=0.0)
 
@@ -54,25 +54,25 @@ fixation = visual.TextStim(win=win, ori=0, name='fixation',
 beep = p.sound.Sound(value = 3500.0, secs = 0.007, octave = 3)
 #instruction for beeps
 instruction_B = p.visual.TextStim(win = win, ori = 0, text = 'Number of Beeps',
-font = 'Arial Narrow', height = 0.1, color = (1, 1, 1))
+font = 'Arial Narrow', height = 0.1, color = (1, 1, 1), pos = (0, 0.5))
 #instruction for flashes
 instruction_F = p.visual.TextStim(win = win, ori = 0, text = 'Number of Flashes',
-font = 'Arial Narrow', height = 0.1, color = (1, 1, 1))
+font = 'Arial Narrow', height = 0.1, color = (1, 1, 1), pos = (0, 0.5))
 #instruction for joint
 instruction_BF = p.visual.TextStim(win = win, ori = 0, text = 'Number of Flashes / Beeps',
-font = 'Arial Narrow', height = 0.1, color = (1, 1, 1))
+font = 'Arial Narrow', height = 0.1, color = (1, 1, 1), pos = (0, 0.5))
 #instruction for beep block
 instruction_IB = p.visual.TextStim(win = win, ori = 0, text = 'Beep Block',
-font = 'Arial Narrow', height = 0.1, pos = (0,0), color = (1, 1, 1))
+font = 'Arial Narrow', height = 0.1, pos = (0,0.5), color = (1, 1, 1))
 #instruction for flash block
 instruction_IF = p.visual.TextStim(win = win, ori = 0, text = 'Flash Block',
-font = 'Arial Narrow', height = 0.1, pos = (0,0), color = (1, 1, 1))
+font = 'Arial Narrow', height = 0.1, pos = (0,0.5), color = (1, 1, 1))
 #instruction for joint block
 instruction_J = p.visual.TextStim(win = win, ori = 0, text = 'Joint Block',
-font = 'Arial Narrow', height = 0.1, pos = (0,0), color = (1, 1, 1))
+font = 'Arial Narrow', height = 0.1, pos = (0,0.5), color = (1, 1, 1))
 #instruction for continue
 instruction_E = p.visual.TextStim(win = win, ori = 0, text = 'Please press enter to continue',
-font = 'Arial Narrow', height = 0.07, pos = (0,-0.2), color = (1, 1, 1))
+font = 'Arial Narrow', height = 0.07, pos = (0,0.3), color = (1, 1, 1))
 
 #keys for beeps
 FPS = 60
@@ -118,6 +118,7 @@ conditions = [1, 2, 3]
 random.shuffle(conditions)
 Trial = 1
 for c in range(3):
+    fixation.draw()
     #chooses one condition
     Block = conditions[0]
     print "Block = ", Block
@@ -153,7 +154,7 @@ for c in range(3):
     #beep/flash combinations
     option = [1, 2, 3, 4, 5, 6, 7, 8, 9]*10 #multiply my 1/9 number of trials desired
     random.shuffle(option)
-    for t in range(30): #number of trials per condition
+    for t in range(2): #number of trials per condition
         data = []
         data.append(SUB)
         data.append(Block)
@@ -293,6 +294,7 @@ for c in range(3):
             #participant input
             while True:
                 if Block == 1:  #individual beep block
+                    fixation.draw()
                     instruction_B.draw()
                     win.flip()
                     clock_B.reset()
@@ -338,7 +340,9 @@ for c in range(3):
                     data.append(RTBeep)
                     win.flip()
                     break
+
                 elif Block == 2:    #individual flash block
+                    fixation.draw()
                     instruction_F.draw()
                     win.flip()
                     clock_F.reset()
@@ -383,28 +387,60 @@ for c in range(3):
 
                     win.flip()
                     break
+
                 elif Block == 3:    #joint block
-                    instruction_B.draw()
-                    win.flip()
-                    clock_B.reset()
-                    keys_B = p.event.waitKeys(keyList = ["q", "w", "e", "escape"])
-                    
-                    if keys_B == "q" or keys_B == "w" or keys_B == "e":
-                        clock_B.getTime()
-                        break
-                    elif keys_B[0] == "escape":
-                        win.close()
-                        core.quit()
-                    instruction_F.draw()
-                    win.flip()
-                    clock_F.reset()
-                    keys_F = p.event.waitKeys(keyList = ["i", "o", "p", "escape"])
-                    if keys_F == "i" or keys_F == "o" or keys_F == "p":
-                        clock_F.getTime()
-                        break
-                    elif keys_F[0] == "escape":
-                        win.close()
-                        core.quit()
+                    Randomization = [1, 2]
+                    random.shuffle(Randomization)
+                    if Randomization[0] == 1:
+                        fixation.draw()
+                        instruction_B.draw()
+                        win.flip()
+                        clock_B.reset()
+                        keys_B = p.event.waitKeys(keyList = ["q", "w", "e", "escape"])
+
+                        if keys_B == "q" or keys_B == "w" or keys_B == "e":
+                            clock_B.getTime()
+                            break
+                        elif keys_B[0] == "escape":
+                            win.close()
+                            core.quit()
+                        fixation.draw()
+                        instruction_F.draw()
+                        win.flip()
+                        clock_F.reset()
+                        keys_F = p.event.waitKeys(keyList = ["i", "o", "p", "escape"])
+                        if keys_F == "i" or keys_F == "o" or keys_F == "p":
+                            clock_F.getTime()
+                            break
+                        elif keys_F[0] == "escape":
+                            win.close()
+                            core.quit()
+
+                    if Randomization[0] == 2:
+                        fixation.draw()
+                        instruction_F.draw()
+                        win.flip()
+                        clock_F.reset()
+                        keys_F = p.event.waitKeys(keyList = ["i", "o", "p", "escape"])
+                        if keys_F == "i" or keys_F == "o" or keys_F == "p":
+                            clock_F.getTime()
+                            break
+                        elif keys_F[0] == "escape":
+                            win.close()
+                            core.quit()
+
+                        fixation.draw()
+                        instruction_B.draw()
+                        win.flip()
+                        clock_B.reset()
+                        keys_B = p.event.waitKeys(keyList = ["q", "w", "e", "escape"])
+
+                        if keys_B == "q" or keys_B == "w" or keys_B == "e":
+                            clock_B.getTime()
+                            break
+                        elif keys_B[0] == "escape":
+                            win.close()
+                            core.quit()
 
                     #clock.reset()
                     #flashresp = 0
@@ -472,6 +508,7 @@ for c in range(3):
                     print "here"
                     break
         core.wait(1)
+        fixation.draw()
 
     # write data to file
         with open(path, 'a') as f:
